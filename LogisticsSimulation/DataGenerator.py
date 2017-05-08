@@ -53,6 +53,7 @@ class DataGenerator:
     def GenerateHomes(self):
         for loc in self.locations[1:]:
             locSplit = loc[0].split(',')
+            
             for address in self.addressDic[locSplit[0]]:
                 addressSplit = address.split('-')
                 i = 0
@@ -63,8 +64,9 @@ class DataGenerator:
     #generates random name
     def GenerateName(self):
         randomIdx = random.randrange(0, len(self.nameList), 1)
-        name = self.nameList[randomIdx][0] + ' ' + self.nameList[randomIdx][1]
+        name = self.nameList[randomIdx] #[0] + ' ' + self.nameList[randomIdx][1]
         return name
+
     #assign people to the homes
     def AssignOwners(self):
        i = 0
@@ -85,7 +87,7 @@ class DataGenerator:
             reciever = home.names[random.randrange(0, len(home.names), 1)]
         else:
             reciever = home.names[0]
-        return LogisticsSystem.Letter(reciever, home.city, home.address, home.addressNr, home.zipCode, 'True')
+        return LogisticsSystem.Letter(reciever[0].split(',')[0], reciever[0].split(',')[1], home.address, home.addressNr, home.zipCode, home.city, 'True')
         
     def GenerateLetters(self, numLetters):
         i = 0
@@ -95,14 +97,14 @@ class DataGenerator:
             
     def SaveData(self, fileName):
         with open(fileName, 'w') as csvfile:
-            fieldnames = ['Name', 'Street', 'StreetNr', 'Zip Code', 'City', 'Legitimate']
+            fieldnames = ['Name', 'SurName', 'Street', 'StreetNr', 'ZipCode', 'City', 'Legitimate']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     
             writer.writeheader()
             i = 0
             while i < len(self.letters):
-                writer.writerow({'Name': self.letters[i].name, 'Street': self.letters[i].address, 'StreetNr': self.letters[i].addressNr,
-                             'Zip Code': self.letters[i].zipCode, 'City': self.letters[i].city, 'Legitimate': self.letters[i].correct})
+                writer.writerow({'Name': self.letters[i].name, 'SurName': self.letters[i].surName, 'Street': self.letters[i].address, 'StreetNr': self.letters[i].addressNr,
+                             'ZipCode': self.letters[i].zipCode, 'City': self.letters[i].city, 'Legitimate': self.letters[i].correct})
                 i += 1
                 
     def RemoveCriticalData(self, dataType):
@@ -111,6 +113,9 @@ class DataGenerator:
             randIdx = random.randrange(1, len(self.letters), 1)
             if(dataType == 'name' and self.letters[randIdx].name != ''):
                 self.letters[randIdx].name = ''
+                removed = True
+            if(dataType == 'surName' and self.letters[randIdx].surName != ''):
+                self.letters[randIdx].surName = ''
                 removed = True
             if(dataType == 'city' and self.letters[randIdx].city != ''):
                 self.letters[randIdx].city = ''
@@ -162,6 +167,7 @@ class DataGenerator:
             
     def RemoveAndAlterData(self, errorRate):
         self.RemoveData('name', errorRate)
+        self.RemoveData('surName', errorRate)
         self.RemoveData('city', errorRate)
         self.RemoveData('address', errorRate)
         self.RemoveData('addressNr', errorRate)
@@ -169,8 +175,8 @@ class DataGenerator:
         self.AlterData('zipCode', errorRate)
         
     def GenerateData(self, numLetters, errorPercentage, fileName):
-        errorSize = int(len(self.letters) * ((errorPercentage)*pow(10,-2)))
-        errorTypes = 6
+        errorSize = numLetters * ((errorPercentage)*pow(10,-2))
+        errorTypes = 4
         errorRate = int(errorSize/errorTypes)
         
         self.GenerateLetters(numLetters)
