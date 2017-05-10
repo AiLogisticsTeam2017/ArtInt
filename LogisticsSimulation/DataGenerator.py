@@ -165,20 +165,22 @@ class DataGenerator:
             print(self.loadedLetters[i])
             i += 1
             
-    def RemoveAndAlterData(self, errorRate):
-        self.RemoveData('name', errorRate)
-        self.RemoveData('surName', errorRate)
-        self.RemoveData('city', errorRate)
+    def RemoveAndAlterData(self, errorRate, safeErrorRate):
+        self.RemoveData('name', safeErrorRate)
+        self.RemoveData('surName', safeErrorRate)
+        self.RemoveData('city', safeErrorRate)
         self.RemoveData('address', errorRate)
         self.RemoveData('addressNr', errorRate)
         self.RemoveData('zipCode', errorRate)
         self.AlterData('zipCode', errorRate)
         
-    def GenerateData(self, numLetters, errorPercentage, fileName):
+    def GenerateData(self, numLetters, errorPercentage, safeErrorPercentage, fileName):
         errorSize = numLetters * ((errorPercentage)*pow(10,-2))
-        errorTypes = 4
+        errorTypes = 4 #hard coded number of error types
+        safeErrorTypes = 3 #hard coded number of error types
         errorRate = int(errorSize/errorTypes)
+        safeErrorRate = int(errorSize/safeErrorTypes)
         
         self.GenerateLetters(numLetters)
-        self.RemoveAndAlterData(errorRate)
+        self.RemoveAndAlterData(errorRate, safeErrorRate)
         self.SaveData(fileName)
