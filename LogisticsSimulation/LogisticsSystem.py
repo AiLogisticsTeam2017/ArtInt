@@ -173,59 +173,15 @@ class LogisticsSystem:
                 for linked in self.sortingCentres:
                     if(letter.endPos.zipCode == linked.address.zipCode):
                         #send letter to postal centre
-                        linked.letters.append(letter)
+                        linked.letters.append(letter.letter)
                         #introduce an error! for example sent to the wrong sorting centre
                         break
+            centre.sentLetters = []
         
-        
-
-#Code for debugging
-#initialisation
-logistics = LogisticsSystem()
-
-#load letters (data) to the system
-logistics.LoadLetters('alteredData.csv')
-#remove letters with missing information
-logistics.RemoveBrokenLetters()
-#distribute letters to post cetres
-logistics.DistributeLetters()
-#sort letters and send them to the right post centre / to the right address
-logistics.SortAndSendLetters()
-
-print("Delivered Letters")
-for letter in logistics.deliveredLetters:
-    print("Letter: ", letter.letter.address, letter.letter.zipCode, "StartPos: ", letter.startPos.address, letter.startPos.zipCode, "endPos: ", letter.endPos.address, letter.endPos.zipCode)
-
-print("Letters In system")
-for centre in logistics.sortingCentres:
-    for letter in centre.letters:
-        pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def SimulateLogistics(self):
+       #remove letters with missing information
+       self.RemoveBrokenLetters()
+       #distribute letters to post cetres
+       self.DistributeLetters()
+       #sort letters and send them to the right post centre / to the right address
+       self.SortAndSendLetters()

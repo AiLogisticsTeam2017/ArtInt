@@ -1,0 +1,20 @@
+SystemInformation
+
+LogisticsSimulation
+
+1. Variables are initialised
+
+2. mainloop
+
+	2.1. data is generated
+
+	2.2. data is loaded into the system
+
+	2.3. unvalid data is removed from the system
+
+	2.4. data is distributed to random post centres
+
+	2.5. each post centre sorts their data
+
+	2.6. each post centre sends their data either
+ 	to another post centre or to the end address

@@ -158,12 +158,9 @@ class DataGenerator:
             for row in reader:
                 self.loadedLetters.append(row)
         return
-    
-    def PrintLetters(self):
-        i = 0
-        while i < len(self.loadedLetters):
-            print(self.loadedLetters[i])
-            i += 1
+            
+    def DeleteData(self):
+        self.letters = []
             
     def RemoveAndAlterData(self, errorRate, safeErrorRate):
         self.RemoveData('name', safeErrorRate)
@@ -184,3 +181,4 @@ class DataGenerator:
         self.GenerateLetters(numLetters)
         self.RemoveAndAlterData(errorRate, safeErrorRate)
         self.SaveData(fileName)
+        self.DeleteData()
