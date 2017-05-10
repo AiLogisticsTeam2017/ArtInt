@@ -1,4 +1,5 @@
 import csv
+import random
 #class describing the end locations for the letters
 class Home:
     def __init__(self, names, city, address, addressNr, zipCode):
@@ -17,26 +18,55 @@ class Letter:
         self.zipCode = zipCode
         self.city = city
         self.correct = correct
+        
+class Address:
+    def __init__(self, address,addressNr,zipCode,city):
+        self.address = address
+        self.addressNr = addressNr
+        self.zipCode = zipCode
+        self.city = city
+        
+class SentLetter:
+    def __init__(self, letter):
+        self.letter = letter
+        self.startPos = Address("","","","")
+        self.endPos = Address("","","","")
+        self.correctEndPos = Address("","","","")
 
 class SortingCentre:
-    def __init__(self, city, zipCode):
-        self.city = city
-        self.zipCode = zipCode
+    def __init__(self, address):
+        self.address = address
         self.letters = []
         self.linkedCenters = []
         self.linkedAddresses = []
-                
-    def SendLetters(self):
-        if (len(self.letters) > 0):
-            pass
-            
+        self.sentLetters = []
+        
+    def SortLetters(self):
+        for letter in self.letters:
+            sentLetter = SentLetter(letter)
+            sentLetter.startPos = Address(self.address.address, self.address.addressNr, self.address.zipCode, self.address.city)
+            #sets the correct end position can be without specified city
+            if(sentLetter.startPos.zipCode[:2] == letter.zipCode[:2]):
+                sentLetter.correctEndPos = Address(letter.address, letter.addressNr, letter.zipCode, letter.city)
+            else:
+                sentLetter.correctEndPos = Address("SortingStreet", "1", letter.zipCode[:2] + "222", letter.city)#ALERT temp solution for postal centres address
+            sentLetter.endPos = sentLetter.correctEndPos #ALERT this shall not always be right!
+            self.sentLetters.append(sentLetter)
+        self.letters = []
+
 class LogisticsSystem:
     def __init__(self):
-        self.locations = []
-        self.centreLinks = {}
-        self.addressLinks = {}
-        self.sortingCetres = []
-        self.letters = []
+        self.locations = [] #A list containing the cities with their first two postal Code numbers
+        self.locationsDic = {} #the key is the first 2 zipCode numbers, value is the city
+        self.centreLinks = {} #the key is a city and the value is the connected cities
+        self.addressLinks = {} #the key is a city and the value is the connected addresses
+        self.sortingCetres = [] #A list containing the sorting Centres
+        self.letters = [] #A list containing the letters (data)
+        
+        self.GetLocations('Locations.csv')
+        self.GetSortingCentres()
+        self.GetCentreLinks('PostCentreLinks.csv')
+        self.GetAddressDic('AddressDic.csv')
         
     #Load Cities from Locations.csv file
     def GetLocations(self, fileName):
@@ -44,13 +74,21 @@ class LogisticsSystem:
             reader = csv.reader(csvfile, delimiter = ' ', quotechar = '|')
             for row in reader:
                 self.locations.append(row)
+        first = True
+        #creates a dictionary with the first two zip code numbers as key and the city as value
+        for location in self.locations:
+            if(first):
+                first = False
+                continue
+            self.locationsDic[location[0].split(',')[1]] = location[0].split(',')[0]
     #loads the sorting centres from locations
     def GetSortingCentres(self):
         i = 1
         while i < len(self.locations):
             city = self.locations[i][0].split(',')[0]
-            zipCode = self.locations[i][0].split(',')[1] + '222'
-            sortCentre = SortingCentre(city, zipCode)
+            zipCode = self.locations[i][0].split(',')[1] + '222' #ALERT temp solution to postal centres zipCode
+            address = Address("SortingStreet", "1", zipCode, city)#ALERT temp solution to postal centres address
+            sortCentre = SortingCentre(address)
             self.sortingCetres.append(sortCentre)
             i += 1
     #load shipping links from PostCentreLinks.csv
@@ -64,7 +102,7 @@ class LogisticsSystem:
                 self.centreLinks[key] = value
                 
         for centre in self.sortingCetres:
-            centre.linkedCenters = self.centreLinks[centre.city]
+            centre.linkedCenters = self.centreLinks[centre.address.city]
         
     #Load City Address from AddressDic.csv file
     def GetAddressDic(self, fileName):
@@ -113,31 +151,37 @@ class LogisticsSystem:
                 i += 1
             self.letters = tempLetters
         
-    #Distribute letters to the right post centre               
+    #Distribute letters to the right post centre
     def DistributeLetters(self):
         for letter in self.letters:
-            #First Sort
-            self.FirstPostalCodeSort(letter.zipCode)
-            #Second sort
-            self.SecondPostalCodeSort(letter.zipCode)
-
-    def FirstPostalCodeSort(self, zipCode):
-        firstNum = zipCode[:3]
-        print(firstNum)
-
-    def SecondPostalCodeSort(self, zipCode):
-        secondNum = zipCode[3:]
-        print(secondNum)
+            randIdx = random.randrange(0, len(self.sortingCetres), 1)
+            self.sortingCetres[randIdx].letters.append(letter)
+            self.letters = []
+            
+    def SortAndSendLetters(self):
+        self.sortingCetres[0].SortLetters()
+        for centre in self.sortingCetres:
+            for letter in centre.sentLetters:
+                pass
+                #Send letters properly...
+        
+        
 
 #Code for debugging
+#initialisation
 logistics = LogisticsSystem()
-logistics.GetLocations('Locations.csv')
-logistics.GetSortingCentres()
-logistics.GetCentreLinks('PostCentreLinks.csv')
-logistics.GetAddressDic('AddressDic.csv')
+
+#load letters (data) to the system
 logistics.LoadLetters('alteredData.csv')
+#remove letters with missing information
 logistics.RemoveBrokenLetters()
+#distribute letters to post cetres
 logistics.DistributeLetters()
+#sort letters and send them to the right post centre / to the right address
+logistics.SortAndSendLetters()
+
+
+
 
 
 
