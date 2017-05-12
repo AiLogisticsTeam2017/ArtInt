@@ -10,8 +10,9 @@ logistics = LogisticsSystem()
 clear = lambda: os.system('cls') # clears console
 
 
-LOOP_SPEED = 2
+LOOP_SPEED = 2 # determines the loop speed in seconds
 loopNr = 0
+numberOfLoops = 1
 time = datetime.datetime.now()
 #main loop    
 while True:
@@ -37,6 +38,6 @@ while True:
             for letter in centre.letters:
                 print("Letter: ", letter.zipCode, "Location: ", centre.address.zipCode)
                 lettersInSystem += 1"""
-    if(loopNr == 1): #number of loops
+    if(loopNr == numberOfLoops): #number of loops
         print('LoopNr met!')
         break
