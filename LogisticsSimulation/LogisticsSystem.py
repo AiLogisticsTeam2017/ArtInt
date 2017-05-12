@@ -161,13 +161,13 @@ class LogisticsSystem:
             self.sortingCentres[randIdx].letters.append(letter)
             self.letters = []
             
-    def SortAndSendLetters(self, fileName):
+    def SortAndSendLetters(self, fileName, errorChance):
         #sort the letters
         for centre in self.sortingCentres:
             centre.SortLetters()
         
         #random error introduced as a wrong delivery
-        
+        self.MisplaceLetters(errorChance)
         
         #saving the data for the AI
         self.GetSentLetters()
@@ -188,6 +188,36 @@ class LogisticsSystem:
                         break
             centre.sentLetters = []
             
+    def MisplaceLetters(self, errorChance):
+        for centre in self.sortingCentres:
+            for letter in centre.sentLetters:
+                rng = random.randrange(0, 100, 1)
+                if (rng <= errorChance):
+                    randomError = random.randrange(1,4,1)
+                    print(randomError)
+                    if(randomError == 1): # changes the address to a random different linked address
+                        addresses = self.addressLinks[centre.address.city]
+                        while True:
+                            randomIdx = random.randrange(0,len(addresses), 1)
+                            if(addresses[randomIdx][0] != letter.endPos.address):
+                                letter.endPos.address = addresses[randomIdx][0]
+                                letter.correctDelivery = False
+                                break
+                    if(randomError == 2):# changes the address number to a random different number between 1-300
+                        while True:
+                            randomNr = random.randrange(1, 300, 1)
+                            if(randomNr != letter.endPos.addressNr):
+                                letter.endPos.addressNr = randomNr
+                                letter.correctDelivery = False
+                                break
+                    if(randomError == 3): # changes the city/zipcode to a random different city/zipcode
+                        while True:
+                            randomIdx = random.randrange(2,len(self.locations), 1)
+                            if(self.locations[randomIdx][0].split(',')[1] != letter.endPos.zipCode[:2]):
+                                letter.endPos.zipCode = self.locations[randomIdx][0].split(',')[1] + '222'
+                                print(letter.endPos.zipCode)
+                                break
+    
     #gives the system all sent letters from the sorting centres before they are deleted
     def GetSentLetters(self):
         for centre in self.sortingCentres:
@@ -211,14 +241,14 @@ class LogisticsSystem:
                 i += 1
             #self.sentLetters = []
         
-    def SimulateLogistics(self, fileName):
+    def SimulateLogistics(self, fileName, errorChance):
        #remove letters with missing information
        self.RemoveBrokenLetters()
        #distribute letters to post cetres
        self.DistributeLetters()
        #sort letters and send them to the right post centre / to the right address
-       # also saves the sent letters to a file.
-       self.SortAndSendLetters(fileName)
+       #also saves the sent letters to a file.
+       self.SortAndSendLetters(fileName, errorChance)
        
        
        

@@ -24,7 +24,7 @@ while True:
         
         dataGen.GenerateData(20, 20, 10, 'alteredData.csv') #Parameters: NumberOfLetters, ErrorPercentage, SafeErrorPercentage, FileName
         logistics.LoadLetters('alteredData.csv')
-        logistics.SimulateLogistics('deliveries.csv')
+        logistics.SimulateLogistics('deliveries.csv', 50) #Parameters: saveFileName, errorChance
         
         #only for debugging
         print("Delivered Letters")
