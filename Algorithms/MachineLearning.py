@@ -17,6 +17,8 @@ class RandomForest:
     
     def __init__(self):
         
+        rf_model = -1
+        
 class NaiveBayes:
     
     def __init__(self):

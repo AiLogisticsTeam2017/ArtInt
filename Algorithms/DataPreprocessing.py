@@ -111,7 +111,7 @@ class DataFrame:
         feature_col_names = ['Name', 'SurName', 'City', 'Street', 'StreetNr', 'ZipCode']
         prediction_class_name = ['Legitimate']
         
-        X = self.df[feature_col_names].values     # predictor feature columnd (8 X m)
+        X = self.df[feature_col_names].values     # predictor feature columnd (8 X m),
         y = self.df[prediction_class_name].values # predicted calss (1 = true, 0 = false) column (1 X m)
         split_test_size = 0.90
         
