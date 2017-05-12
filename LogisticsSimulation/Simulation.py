@@ -11,7 +11,7 @@ clear = lambda: os.system('cls') # clears console
 
 
 LOOP_SPEED = 2
-loopNr = 1
+loopNr = 0
 time = datetime.datetime.now()
 #main loop    
 while True:
@@ -27,7 +27,7 @@ while True:
         logistics.SimulateLogistics('deliveries.csv', 50) #Parameters: saveFileName, errorChance
         
         #only for debugging
-        print("Delivered Letters")
+        """print("Delivered Letters")
         for letter in logistics.deliveredLetters:
             print("Letter: ", letter.letter.zipCode, "StartPos: ", letter.startPos.zipCode, "endPos: ", letter.endPos.zipCode)
 
@@ -35,8 +35,8 @@ while True:
         lettersInSystem = 0
         for centre in logistics.sortingCentres:
             for letter in centre.letters:
-                print("Letter: ", letter.zipCode, "Location: ", centre.address.zipCode)
+                print("Letter: ", letter.zipCode, "Location: ", centre.address.zipCode)"""
                 lettersInSystem += 1
-    if(loopNr == 2):
+    if(loopNr == 1): #number of loops
         print('LoopNr met!')
         break
