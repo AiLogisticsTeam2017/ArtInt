@@ -13,6 +13,7 @@ clear = lambda: os.system('cls') # clears console
 LOOP_SPEED = 2
 loopNr = 0
 time = datetime.datetime.now()
+
 #main loop    
 while True:
     currentTime = datetime.datetime.now()

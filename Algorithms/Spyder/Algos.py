@@ -272,19 +272,18 @@ lr_model.fit(X_train, y_train.ravel())
 lr_predict_train = lr_model.predict(X_train)
 
 print("Accuracy Training: {0:.4f}".format(metrics.accuracy_score(y_train, lr_predict_train)))
-print()
 
 lr_predict_test = lr_model.predict(X_test)
 
 print("Accuracy Test: {0:.4f}".format(metrics.accuracy_score(y_test, lr_predict_test)))
-print()
+print("")
 
-print("Confusion Matrix:")
+print("Confusion Matrix")
 # Note the use of labels for set 1 = True to upper left and 0 = False to lower right
 print("{0}".format(metrics.confusion_matrix(y_test, lr_predict_test, labels = [1, 0])))
 print()
 
-print("Classification Report:")
+print("Classification Report")
 print(metrics.classification_report(y_test, lr_predict_test, labels = [1, 0]))
 
 ###################
