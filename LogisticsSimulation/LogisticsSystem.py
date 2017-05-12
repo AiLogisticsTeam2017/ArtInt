@@ -194,7 +194,6 @@ class LogisticsSystem:
                 rng = random.randrange(0, 100, 1)
                 if (rng <= errorChance):
                     randomError = random.randrange(1,4,1)
-                    print(randomError)
                     if(randomError == 1): # changes the address to a random different linked address
                         addresses = self.addressLinks[centre.address.city]
                         while True:
@@ -215,7 +214,6 @@ class LogisticsSystem:
                             randomIdx = random.randrange(2,len(self.locations), 1)
                             if(self.locations[randomIdx][0].split(',')[1] != letter.endPos.zipCode[:2]):
                                 letter.endPos.zipCode = self.locations[randomIdx][0].split(',')[1] + '222'
-                                print(letter.endPos.zipCode)
                                 break
     
     #gives the system all sent letters from the sorting centres before they are deleted

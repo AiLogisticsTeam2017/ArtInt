@@ -35,8 +35,8 @@ while True:
         lettersInSystem = 0
         for centre in logistics.sortingCentres:
             for letter in centre.letters:
-                print("Letter: ", letter.zipCode, "Location: ", centre.address.zipCode)"""
-                lettersInSystem += 1
+                print("Letter: ", letter.zipCode, "Location: ", centre.address.zipCode)
+                lettersInSystem += 1"""
     if(loopNr == 1): #number of loops
         print('LoopNr met!')
         break
