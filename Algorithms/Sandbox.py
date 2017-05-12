@@ -4,7 +4,7 @@ Created on Thu May 11 14:21:39 2017
 @author: Viktor Andersson
 """
 
-# This file is a pure play ground to test how the python language works and new functions in other modules
+# Gregors playground in python
 
 my_name = "World"
 hello_statement = "Hello " + my_name
