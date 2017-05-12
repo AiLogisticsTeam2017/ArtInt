@@ -69,8 +69,11 @@ from MachineLearning import Logistic
 from MachineLearning import LogisticCV
 
 #dp = DataFrame("../LogisticsSimulation/alteredData.csv")
-dp22 = DataFrame("../LogisticsSimulation/deliveries.csv")
-dp = DataFrame("../alteredData10k.csv")
+#dp22 = DataFrame("../LogisticsSimulation/deliveries.csv")
+dp = DataFrame("../alteredData10k.csv", 0.9)
+dp2 = DataFrame("../alteredData100k.csv", 0.9)
+dp3 = DataFrame("../alteredData1000k.csv", 0.9)
+dp4 = DataFrame("../alteredData1M.csv", 0.9)
 
 #dp.SanityCheck()
 #dp.TrueFalseRatio()
@@ -85,24 +88,69 @@ dp.DataSplit()
 #dp.plot_corr(dp.df)
 #dp.df.corr()
 
-#print("Random Forest")
+dp2.DummyEncode(dp2.df)
+dp2.DataSplit()
+
+dp3.DummyEncode(dp3.df)
+dp3.DataSplit()
+
+dp4.DummyEncode(dp4.df)
+dp4.DataSplit()
+#print("Random Forest batch 1!!!")
 #rf = RandomForest(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
 
 #rf.Train()
 #rf.PrintInformation()
 #print()
 
-#print("Naive Bayes")
+#print("This is batch 2!")
+#rf = RandomForest(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
+
+#rf.Train()
+#rf.PrintInformation()
+
+#print("Naive Bayes, batch 1")
 #nb = NaiveBayes(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
 
 #nb.Train()
 #nb.PrintInformation()
 #print()
 
-#lr = Logistic(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
+#print("Batch 2")
+#nb = NaiveBayes(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
 
-#lr.Train()
-#lr.PrintInformation()
+#nb.Train()
+#nb.PrintInformation()
+
+print("Logistic Regression, batch 1")
+lr = Logistic(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
+
+lr.Train()
+lr.PrintInformation()
+print()
+
+print("Batch 2")
+
+lr = Logistic(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
+
+lr.Train()
+lr.PrintInformation()
+print()
+
+print("Batch 3")
+
+lr = Logistic(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
+
+lr.Train()
+lr.PrintInformation()
+print()
+
+print("Batch 4")
+
+lr = Logistic(dp4.X_train, dp4.y_train, dp4.X_test, dp4.y_test)
+
+lr.Train()
+lr.PrintInformation()
 
 #lrCV = LogisticCV(dp.X_train, dp.y_train, dp.X_test, dp.y_test, 4)
 

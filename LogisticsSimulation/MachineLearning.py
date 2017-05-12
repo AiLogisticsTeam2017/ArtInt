@@ -31,7 +31,7 @@ class RandomForest:
         self.rf_predict_test = -1
         
     def Train(self):
-        self.rf_model = RandomForestClassifier(random_state = 42) # Create random forest object
+        self.rf_model = RandomForestClassifier(random_state = 42, warm_start = True) # Create random forest object
         self.rf_model.fit(self.X_train, self.y_train.ravel())
         
         self.rf_predict_train = self.rf_model.predict(self.X_train)
@@ -127,7 +127,7 @@ class Logistic:
         
     def Train(self):
         
-        self.lr_model = LogisticRegression(C = 0.7, random_state = 42)
+        self.lr_model = LogisticRegression(C = 0.7, random_state = 42, warm_start = True)
         
         try:
             self.lr_model.fit(self.X_train, self.y_train.ravel())

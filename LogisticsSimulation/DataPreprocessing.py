@@ -18,7 +18,7 @@ from sklearn.cross_validation import train_test_split # Used to split data into 
 
 class DataFrame:
     
-    def __init__(self, filePath):
+    def __init__(self, filePath, testSize):
         self.df = self.LoadDataFrame(filePath)
 
         # Training and Test set for Machine Learning
@@ -26,6 +26,8 @@ class DataFrame:
         self.X_test  = -1
         self.y_train = -1
         self.y_test  = -1
+        
+        self.testSize = testSize
      
     # Loads the Data Frame
     def LoadDataFrame(self, filePath):
@@ -113,9 +115,8 @@ class DataFrame:
         
         X = self.df[feature_col_names].values     # predictor feature columnd (8 X m)
         y = self.df[prediction_class_name].values # predicted calss (1 = true, 0 = false) column (1 X m)
-        split_test_size = 0.90
         
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size = split_test_size, random_state = 42) # 42 is the answer to everything
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size = self.testSize, random_state = 42) # 42 is the answer to everything
 
     #Print to check if the split was to our liking
     def DataSplitCheck(self):
