@@ -1,0 +1,17 @@
+Name,SurName,Street,StreetNr,ZipCode,City,Legitimate,StartStreet,StartStreetNr,StartZipCode,StartCity,EndStreet,EndStreetNr,EndZipCode,EndCity,CorrectDelivery
+Buddy,Rowser,Abborregatan,72,55147,Jonkoping,True,SortingStreet,1,11222,Stockholm,SortingStreet,1,55222,Jonkoping,True
+Ester,Robards,Adelgatan,198,11165,Stockholm,True,SortingStreet,1,11222,Stockholm,Adelgatan,198,11165,Stockholm,True
+Gladis,Dunlap,Adlerberthsgatan,122,22123,Lund,True,SortingStreet,1,21222,Malmo,SortingStreet,1,22222,Lund,True
+Juliette,Favors,Blomstigen,110,22134,Lund,True,SortingStreet,1,30222,Halmstad,SortingStreet,1,22222,Lund,True
+Myong,Lofthouse,Krokiusgatan,10,60174,Norrkoping,True,SortingStreet,1,30222,Halmstad,SortingStreet,1,60222,Norrkoping,True
+Ellie,Graziano,Kaptensgatan,36,75168,Uppsala,True,SortingStreet,1,50222,Boras,SortingStreet,1,75222,Uppsala,True
+Jeanie,Lansford,Parkgatan,79,22136,Lund,True,SortingStreet,1,63222,Eskilstuna,SortingStreet,1,22222,Lund,True
+Delbert,Havard,Parkgatan,68,30136,Halmstad,True,SortingStreet,1,63222,Eskilstuna,SortingStreet,1,30222,Halmstad,True
+Corrinne,Bucker,Berget,75,97126,Lulea,True,SortingStreet,1,65222,Karlstad,SortingStreet,1,97222,Lulea,True
+Val,Borge,Allhelgonagatan,37,90125,Umea,True,SortingStreet,1,65222,Karlstad,SortingStreet,1,90222,Umea,True
+Myong,Lofthouse,Adjunktsgatan,184,55164,,True,SortingStreet,1,70222,Orebro,SortingStreet,1,55222,,True
+Corrinne,,Odensbergsgatan,199,85178,Sundsvall,True,SortingStreet,1,70222,Orebro,SortingStreet,1,85222,Sundsvall,True
+Gladis,Dunlap,Berget,53,72126,Vasteras,True,SortingStreet,1,70222,Orebro,SortingStreet,1,72222,Vasteras,True
+Alexa,Grego,Betesbacken,169,30176,Halmstad,True,SortingStreet,1,72222,Vasteras,SortingStreet,1,30222,Halmstad,True
+Savanna,Mcmullin,Blomstigen,58,60134,Norrkoping,True,SortingStreet,1,75222,Uppsala,SortingStreet,1,60222,Norrkoping,True
+Brittanie,Mcfaul,Bohusgatan,12,75147,Uppsala,True,SortingStreet,1,90222,Umea,SortingStreet,1,75222,Uppsala,True

@@ -23,8 +23,8 @@ while True:
         loopNr += 1
         
         dataGen.GenerateData(20, 20, 10, 'alteredData.csv') #Parameters: NumberOfLetters, ErrorPercentage, SafeErrorPercentage, FileName
-        logistics.LoadLetters("alteredData.csv")
-        logistics.SimulateLogistics()
+        logistics.LoadLetters('alteredData.csv')
+        logistics.SimulateLogistics('deliveries.csv')
         
         #only for debugging
         print("Delivered Letters")
@@ -37,3 +37,6 @@ while True:
             for letter in centre.letters:
                 print("Letter: ", letter.zipCode, "Location: ", centre.address.zipCode)
                 lettersInSystem += 1
+    if(loopNr == 2):
+        print('LoopNr met!')
+        break

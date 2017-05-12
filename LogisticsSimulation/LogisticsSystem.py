@@ -32,6 +32,7 @@ class SentLetter:
         self.startPos = Address("","","","")
         self.endPos = Address("","","","")
         self.correctEndPos = Address("","","","")
+        self.correctDelivery = True
 
 class SortingCentre:
     def __init__(self, address):
@@ -63,6 +64,7 @@ class LogisticsSystem:
         self.sortingCentres = [] #A list containing the sorting Centres
         self.letters = [] #A list containing the letters (data)
         self.deliveredLetters = [] #Letters that are delivered to thier end address
+        self.sentLetters = []
         
         self.GetLocations('Locations.csv')
         self.GetSortingCentres()
@@ -159,10 +161,18 @@ class LogisticsSystem:
             self.sortingCentres[randIdx].letters.append(letter)
             self.letters = []
             
-    def SortAndSendLetters(self):
+    def SortAndSendLetters(self, fileName):
         #sort the letters
         for centre in self.sortingCentres:
             centre.SortLetters()
+        
+        #random error introduced as a wrong delivery
+        
+        
+        #saving the data for the AI
+        self.GetSentLetters()
+        self.SaveSentLetters(fileName)        
+            
         #send the letters
         for centre in self.sortingCentres:
             for letter in centre.sentLetters:
@@ -177,11 +187,54 @@ class LogisticsSystem:
                         #introduce an error! for example sent to the wrong sorting centre
                         break
             centre.sentLetters = []
+            
+    #gives the system all sent letters from the sorting centres before they are deleted
+    def GetSentLetters(self):
+        for centre in self.sortingCentres:
+            for letter in centre.sentLetters:
+                self.sentLetters.append(letter)
+            
+    def SaveSentLetters(self, fileName):
+         with open(fileName, 'w') as csvfile:
+            fieldnames = ['Name', 'SurName', 'Street', 'StreetNr', 'ZipCode', 'City', 'Legitimate','StartStreet', 'StartStreetNr', 'StartZipCode', 'StartCity', 
+            'EndStreet', 'EndStreetNr', 'EndZipCode', 'EndCity', 'CorrectDelivery']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    
+            writer.writeheader()
+            i = 0
+            while i < len(self.sentLetters):
+                writer.writerow({'Name': self.sentLetters[i].letter.name, 'SurName': self.sentLetters[i].letter.surName, 'Street': self.sentLetters[i].letter.address, 
+                'StreetNr': self.sentLetters[i].letter.addressNr, 'ZipCode': self.sentLetters[i].letter.zipCode, 'City': self.sentLetters[i].letter.city, 'Legitimate': self.sentLetters[i].letter.correct, 
+                'StartStreet': self.sentLetters[i].startPos.address, 'StartStreetNr': self.sentLetters[i].startPos.addressNr, 'StartZipCode': self.sentLetters[i].startPos.zipCode, 
+                'StartCity': self.sentLetters[i].startPos.city, 'EndStreet': self.sentLetters[i].endPos.address, 'EndStreetNr': self.sentLetters[i].endPos.addressNr, 
+                'EndZipCode': self.sentLetters[i].endPos.zipCode, 'EndCity': self.sentLetters[i].endPos.city, 'CorrectDelivery': self.sentLetters[i].correctDelivery})
+                i += 1
+            #self.sentLetters = []
         
-    def SimulateLogistics(self):
+    def SimulateLogistics(self, fileName):
        #remove letters with missing information
        self.RemoveBrokenLetters()
        #distribute letters to post cetres
        self.DistributeLetters()
        #sort letters and send them to the right post centre / to the right address
-       self.SortAndSendLetters()
+       # also saves the sent letters to a file.
+       self.SortAndSendLetters(fileName)
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
