@@ -78,9 +78,10 @@ from MachineLearning import LogisticCV
 #dp = DataFrame("../LogisticsSimulation/alteredData.csv")
 #dp22 = DataFrame("../LogisticsSimulation/deliveries.csv")
 start = time.time()
-dp = DataFrame("alteredData2.csv", 0.9)
+#dp = DataFrame("alteredData.csv", 0.9)
+#dp = DataFrame("alteredData2.csv", 0.9)
 #dp = DataFrame("../alteredData10k.csv", 0.9)
-#dp = DataFrame("../alteredData100k.csv", 0.9)
+dp = DataFrame("../alteredData100k.csv", 0.9)
 #dp3 = DataFrame("../alteredData1000k.csv", 0.9)
 #dp4 = DataFrame("../alteredData1M.csv", 0.9)
 
@@ -97,6 +98,8 @@ print('Data Frame Size: ', end = "")
 print(len(dp.df.index))
 print('Time: ', end = "")
 print(end - start)
+
+print(dp.df)
 
 #dp.PrintDataFrame(5)
 #dp.DataSplit()

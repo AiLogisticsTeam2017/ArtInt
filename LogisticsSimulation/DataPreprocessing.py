@@ -96,35 +96,47 @@ class DataFrame:
                 #fieldnames = ['Name', 'SurName', 'Street', 'City']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
-                
-                
-        # Loads newly Created register
+        
+        
+        # Loads register csv
         tempDf = pd.read_csv(fileName)
         # Merge the desired Column with the desired register
         if  tempDf.columns[[0]] == 'TempColumn':
             result = pd.concat([tempDf, dataFrame[columnName]], axis = axis, verify_integrity = True, copy = False)
-        else:
-            result = pd.concat([tempDf[columnName], dataFrame[columnName]], axis = axis, verify_integrity = True, copy = False)
-        
-        print(result)
-
-        # Drops the Temp Column, if needed
-        if tempDf.columns[[0]] == 'TempColumn':
+            # Drops the Temp Column
             result.drop(tempDf.columns[[0]], axis = axis, inplace = True)
-        
-        # Drops the last duplicate found
-        result = result.drop_duplicates(result.columns.difference([columnName]))
-        # Drop NaN values
-        result = result.dropna(inplace = True)
+            
+            # Drops the last duplicate found
+            #result = result.drop_duplicates(result.columns.difference([columnName]))
+            result.drop_duplicates(inplace = True)
+            #result = result.append(dataFrame[columnName])
+            # Drop NaN values
+            result.dropna(inplace = True)
+        else:
+            #result = pd.merge(tempDf, dataFrame, on = 'Name')
+            #result = pd.concat([tempDf[columnName], dataFrame[columnName]], axis = 1, verify_integrity = True, copy = False)
+            
+            # This is kinda bad, O(n) should be better performance
+            tempDf2 = dataFrame[columnName].drop_duplicates()
+            tempDf2.dropna(inplace = True)
+            values = list(tempDf2)
+            
+            i = 0
+            while i < len(values):
+                s = pd.Series(values[i], index = [columnName])
+                tempDf = tempDf.append(s, ignore_index = True)
+                    
+                i += 1
+                
+            result = tempDf
 
         result.to_csv(fileName, index = False)
     
+    # Dummy encoding rather slow right now, can be made faster
     def DummyEncode(self, columnName, dataFrame, registerName):
         
         nameRegister = self.LoadDataFrame(registerName)
-        
         maxIndexOfRegister = len(nameRegister.index)
-        
         columnNameTemp = []
 
         # Loads the Register into a temp Array
@@ -141,35 +153,41 @@ class DataFrame:
         
     # This function replaces all the strings in the data frame, to a corresponding number and saves unique names to Register.csv
     def DataPreprocessingSupervised(self, dataFrame):
-        
-        #else:
-            
         # Create Data Frame
         # Axis: 0 = Rows, 1 = Columns
+        print('\nNow: Updating Registers.')
         self.UpdateRegisters(dataFrame, 'Name'   , 1)
-       # self.UpdateRegisters(dataFrame, 'SurName', 1)
-       # self.UpdateRegisters(dataFrame, 'Street' , 1)
-       # self.UpdateRegisters(dataFrame, 'City'   , 1)
+        self.UpdateRegisters(dataFrame, 'SurName', 1)
+        self.UpdateRegisters(dataFrame, 'Street' , 1)
+        self.UpdateRegisters(dataFrame, 'City'   , 1)
+        print('Done: Updating Registers.')
         
         # Theses are the columns in the data frame, if a value is missing replace it.
         # Note, the dummy encoding can not handle numerical values and strings in the same column
-        
-       # self.DummyEncode('Name'   , dataFrame, '1NameRegister.csv')
-       # self.DummyEncode('SurName', dataFrame, '1SurNameRegister.csv')
-       # self.DummyEncode('Street' , dataFrame, '1StreetRegister.csv')
-       # self.DummyEncode('City'   , dataFrame, '1CityRegister.csv')
-        
+        # Update Register
+        print('Now: Dummy Encoding')
+        self.DummyEncode('Name'   , dataFrame, '1NameRegister.csv')
+        self.DummyEncode('SurName', dataFrame, '1SurNameRegister.csv')
+        self.DummyEncode('Street' , dataFrame, '1StreetRegister.csv')
+        self.DummyEncode('City'   , dataFrame, '1CityRegister.csv')
+        print('Done: Dummy Encoding.')
+ 
+        # Dummy encode
         # Fills all the NaN aka missing values with -1
+        print('Now: Replacing Missing Values.')
         dataFrame['Name'] = dataFrame['Name'].fillna(-1)
         dataFrame['SurName'] = dataFrame['SurName'].fillna(-1)
         dataFrame['Street'] = dataFrame['Street'].fillna(-1)
         dataFrame['City'] = dataFrame['City'].fillna(-1)
         dataFrame['StreetNr'] = dataFrame['StreetNr'].fillna(-1)
         dataFrame['ZipCode']  = dataFrame['ZipCode'].fillna(-1)
+        print('Done: Replacing Missing Values.')
         
         # Change True/False to 1/0
+        print('Now: Replacing True/False to 1/0.')
         correctAdress = {True : 1, False : 0}
         dataFrame['Legitimate'] = dataFrame['Legitimate'].map(correctAdress)
+        print('Now: Replacing True/False to 1/0.\n')
         
 #==============================================================================
 #         dataFrame['SurName']  = dataFrame['SurName'].fillna('missing')
