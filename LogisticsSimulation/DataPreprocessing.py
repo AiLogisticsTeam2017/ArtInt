@@ -9,6 +9,10 @@ Created on Thu May 11 10:19:01 2017
 # TODO: Should save corresponding numbers to a file
 #       String compare
 
+import csv
+import os
+from pathlib import Path
+
 import pandas as pd # pandas is a dataframe library
 import matplotlib.pyplot as plt  # matplotlib.pyplot plots data
 #import numpy as np  # numpy provides N-dim object support
@@ -67,43 +71,127 @@ class DataFrame:
     def Lookup(self, ColumnName, Value):
         print(self.df.loc[self.df[ColumnName] == Value])
         
+    def GetIndex(self, ColumnName, Value):
+        return self.df.loc[self.df[ColumnName] == Value].index.get_values()
+        
     
     ##################################################################
     #                      Data Preprocessing                        #
     ##################################################################
     
-    # TODO: Find a more generic way of doing this. Word embedding? gensim,
-    #       Find a way to enable dummy coding to ignore already numerical values in a string column
-        
-    # Loop through a file and see if the name exist already, mby?
-    def StringCompare(self):
-        pass
+    # TODO: Find a more generic way of doing this. Word embedding? gensim?
     
-    # This function replaces all the strings in the data frame, to a corresponding number
-    def DummyEncode(self, dataFrame):
+    def UpdateRegisters(self, dataFrame, columnName, axis):
+        
+        fileName = '1' + columnName + 'Register.csv'
+        
+        if Path(fileName).is_file():
+            print('File already exists. Added new information to old file.')
+            #print('File Removed.')
+            #os.remove(fileName)
+        else:
+            print('File 1' + columnName + 'Register.csv created.')
+            with open(fileName, 'w') as csvfile:
+                fieldnames = ['TempColumn']
+                #fieldnames = ['Name', 'SurName', 'Street', 'City']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                
+                
+        # Loads newly Created register
+        tempDf = pd.read_csv(fileName)
+        # Merge the desired Column with the desired register
+        if  tempDf.columns[[0]] == 'TempColumn':
+            result = pd.concat([tempDf, dataFrame[columnName]], axis = axis, verify_integrity = True, copy = False)
+        else:
+            result = pd.concat([tempDf[columnName], dataFrame[columnName]], axis = axis, verify_integrity = True, copy = False)
+        
+        print(result)
+
+        # Drops the Temp Column, if needed
+        if tempDf.columns[[0]] == 'TempColumn':
+            result.drop(tempDf.columns[[0]], axis = axis, inplace = True)
+        
+        # Drops the last duplicate found
+        result = result.drop_duplicates(result.columns.difference([columnName]))
+        # Drop NaN values
+        result = result.dropna(inplace = True)
+
+        result.to_csv(fileName, index = False)
+    
+    def DummyEncode(self, columnName, dataFrame, registerName):
+        
+        nameRegister = self.LoadDataFrame(registerName)
+        
+        maxIndexOfRegister = len(nameRegister.index)
+        
+        columnNameTemp = []
+
+        # Loads the Register into a temp Array
+        i = 0
+        while i < maxIndexOfRegister:
+            columnNameTemp.append(nameRegister[columnName][i])
+            i += 1
+            
+        # Replace the string with a corresponding Numerical representation
+        i = 0
+        while i < maxIndexOfRegister:
+            dataFrame.replace({columnNameTemp[i]: i}, regex = True, inplace = True)
+            i += 1
+        
+    # This function replaces all the strings in the data frame, to a corresponding number and saves unique names to Register.csv
+    def DataPreprocessingSupervised(self, dataFrame):
+        
+        #else:
+            
+        # Create Data Frame
+        # Axis: 0 = Rows, 1 = Columns
+        self.UpdateRegisters(dataFrame, 'Name'   , 1)
+       # self.UpdateRegisters(dataFrame, 'SurName', 1)
+       # self.UpdateRegisters(dataFrame, 'Street' , 1)
+       # self.UpdateRegisters(dataFrame, 'City'   , 1)
         
         # Theses are the columns in the data frame, if a value is missing replace it.
         # Note, the dummy encoding can not handle numerical values and strings in the same column
-        dataFrame['Name']     = dataFrame['Name'].fillna('missing')
-        dataFrame['SurName']  = dataFrame['SurName'].fillna('missing')
-        dataFrame['Street']   = dataFrame['Street'].fillna('missing')
+        
+       # self.DummyEncode('Name'   , dataFrame, '1NameRegister.csv')
+       # self.DummyEncode('SurName', dataFrame, '1SurNameRegister.csv')
+       # self.DummyEncode('Street' , dataFrame, '1StreetRegister.csv')
+       # self.DummyEncode('City'   , dataFrame, '1CityRegister.csv')
+        
+        # Fills all the NaN aka missing values with -1
+        dataFrame['Name'] = dataFrame['Name'].fillna(-1)
+        dataFrame['SurName'] = dataFrame['SurName'].fillna(-1)
+        dataFrame['Street'] = dataFrame['Street'].fillna(-1)
+        dataFrame['City'] = dataFrame['City'].fillna(-1)
         dataFrame['StreetNr'] = dataFrame['StreetNr'].fillna(-1)
         dataFrame['ZipCode']  = dataFrame['ZipCode'].fillna(-1)
-        dataFrame['City']     = dataFrame['City'].fillna('missing')
         
-        # Chane True/False to 1/0
+        # Change True/False to 1/0
         correctAdress = {True : 1, False : 0}
         dataFrame['Legitimate'] = dataFrame['Legitimate'].map(correctAdress)
         
-        # This part replaces all the Strings with a corresponding number
-        columnsToEncode = list(dataFrame.select_dtypes(include=['category','object']))
-        le = LabelEncoder()
-        for feature in columnsToEncode:
-            try:
-                dataFrame[feature] = le.fit_transform(dataFrame[feature])
-            except:
-                print('Error encoding '+ feature)
-        return dataFrame
+#==============================================================================
+#         dataFrame['SurName']  = dataFrame['SurName'].fillna('missing')
+#         dataFrame['Street']   = dataFrame['Street'].fillna('missing')
+#         dataFrame['StreetNr'] = dataFrame['StreetNr'].fillna(-1)
+#         dataFrame['ZipCode']  = dataFrame['ZipCode'].fillna(-1)
+#         dataFrame['City']     = dataFrame['City'].fillna('missing')
+#         
+#         # Chane True/False to 1/0
+#         correctAdress = {True : 1, False : 0}
+#         dataFrame['Legitimate'] = dataFrame['Legitimate'].map(correctAdress)
+#         
+#         # This part replaces all the Strings with a corresponding number
+#         columnsToEncode = list(dataFrame.select_dtypes(include=['category','object']))
+#         le = LabelEncoder()
+#         for feature in columnsToEncode:
+#             try:
+#                 dataFrame[feature] = le.fit_transform(dataFrame[feature])
+#             except:
+#                 print('Error encoding '+ feature)
+#         return dataFrame
+#==============================================================================
     
     ##################################################################
     #                          Data Sets                             #

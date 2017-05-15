@@ -4,6 +4,8 @@ Created on Thu May 11 14:21:39 2017
 @author: Viktor Andersson
 """
 
+import time
+
 # Gregors playground in python
 
 #==============================================================================
@@ -68,34 +70,51 @@ from MachineLearning import NaiveBayes
 from MachineLearning import Logistic
 from MachineLearning import LogisticCV
 
+
+#tt = DataFrame("1NameRegister.csv", 0.9)
+
+#print(tt.GetIndex('Name', 'Caroll'))
+
 #dp = DataFrame("../LogisticsSimulation/alteredData.csv")
 #dp22 = DataFrame("../LogisticsSimulation/deliveries.csv")
-dp = DataFrame("../alteredData10k.csv", 0.9)
-dp2 = DataFrame("../alteredData100k.csv", 0.9)
-dp3 = DataFrame("../alteredData1000k.csv", 0.9)
-dp4 = DataFrame("../alteredData1M.csv", 0.9)
+start = time.time()
+dp = DataFrame("alteredData2.csv", 0.9)
+#dp = DataFrame("../alteredData10k.csv", 0.9)
+#dp = DataFrame("../alteredData100k.csv", 0.9)
+#dp3 = DataFrame("../alteredData1000k.csv", 0.9)
+#dp4 = DataFrame("../alteredData1M.csv", 0.9)
 
 #dp.SanityCheck()
 #dp.TrueFalseRatio()
 #dp.Lookup('Name', 'Carolin')
 
 #dp.PrintDataFrame(5)
-dp.DummyEncode(dp.df)
+
+dp.DataPreprocessingSupervised(dp.df)
+end = time.time()
+
+print('Data Frame Size: ', end = "")
+print(len(dp.df.index))
+print('Time: ', end = "")
+print(end - start)
+
 #dp.PrintDataFrame(5)
-dp.DataSplit()
+#dp.DataSplit()
 #dp.DataSplitCheck()
 #dp.DataSplitVerifying()
 #dp.plot_corr(dp.df)
 #dp.df.corr()
 
-dp2.DummyEncode(dp2.df)
-dp2.DataSplit()
+#print(reg.GetIndex('Name', 'Errol'))
 
-dp3.DummyEncode(dp3.df)
-dp3.DataSplit()
+#dp2.DummyEncode(dp2.df)
+#dp2.DataSplit()
 
-dp4.DummyEncode(dp4.df)
-dp4.DataSplit()
+#dp3.DummyEncode(dp3.df)
+#dp3.DataSplit()
+
+#dp4.DummyEncode(dp4.df)
+#dp4.DataSplit()
 #print("Random Forest batch 1!!!")
 #rf = RandomForest(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
 
@@ -122,35 +141,35 @@ dp4.DataSplit()
 #nb.Train()
 #nb.PrintInformation()
 
-print("Logistic Regression, batch 1")
-lr = Logistic(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
+#print("Logistic Regression, batch 1")
+#lr = Logistic(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
 
-lr.Train()
-lr.PrintInformation()
-print()
+#lr.Train()
+#lr.PrintInformation()
+#print()
 
-print("Batch 2")
+#print("Batch 2")
 
-lr = Logistic(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
+#lr = Logistic(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
 
-lr.Train()
-lr.PrintInformation()
-print()
+#lr.Train()
+#lr.PrintInformation()
+#print()
 
-print("Batch 3")
+#print("Batch 3")
 
-lr = Logistic(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
+#lr = Logistic(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
 
-lr.Train()
-lr.PrintInformation()
-print()
+#lr.Train()
+#lr.PrintInformation()
+#print()
 
-print("Batch 4")
+#print("Batch 4")
 
-lr = Logistic(dp4.X_train, dp4.y_train, dp4.X_test, dp4.y_test)
+#lr = Logistic(dp4.X_train, dp4.y_train, dp4.X_test, dp4.y_test)
 
-lr.Train()
-lr.PrintInformation()
+#lr.Train()
+#lr.PrintInformation()
 
 #lrCV = LogisticCV(dp.X_train, dp.y_train, dp.X_test, dp.y_test, 4)
 
