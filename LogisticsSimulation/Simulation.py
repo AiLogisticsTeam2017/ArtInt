@@ -24,9 +24,13 @@ while True:
         print("Loop: " + str(loopNr))
         loopNr += 1
         
-        dataGen.GenerateData(20, 20, 10, 'alteredData.csv') #Parameters: NumberOfLetters, ErrorPercentage, SafeErrorPercentage, FileName
-        #logistics.LoadLetters('alteredData.csv')
-        #logistics.SimulateLogistics('deliveries.csv', 50) #Parameters: saveFileName, errorChance
+        dataGen.GenerateData(100000, 20, 10, 'alteredData.csv') #Parameters: NumberOfLetters, ErrorPercentage, SafeErrorPercentage, FileName
+        logistics.LoadLetters('alteredData.csv')
+        #logistics.SimulateLogistics('deliveries1M.csv', 20) #Parameters: saveFileName, errorChance
+        #logistics.SimulateLogistics('deliveries1M2.0.csv', 20) #Parameters: saveFileName, errorChance
+        #logistics.SimulateLogistics('deliveries1M3.0.csv', 20) #Parameters: saveFileName, errorChance
+        #logistics.SimulateLogistics('deliveries10k.csv', 20) #Parameters: saveFileName, errorChance
+        logistics.SimulateLogistics('deliveries100k.csv', 20) #Parameters: saveFileName, errorChance
         
         #only for debugging
         """print("Delivered Letters")

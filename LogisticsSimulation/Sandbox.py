@@ -21,13 +21,18 @@ import time
 # 
 # print()   
 # 
-# items = [1, 2, 3, 4, 5]
+#items = [1, 2, 3, 4, 5]
 # 
-# for item in items:
-#     print (item)
+#for index, item in enumerate(items):
+#    print (item, end = "")
+#    print(index)
 #     
 # print()    
-# 
+#a = {}
+#print(a.items())
+#a['Name'] = 9
+#print(a.items())
+ 
 # a = 'Hello'
 # b = 'World'
 # c = 'Hello'
@@ -70,110 +75,117 @@ from MachineLearning import NaiveBayes
 from MachineLearning import Logistic
 from MachineLearning import LogisticCV
 
-
-#tt = DataFrame("1NameRegister.csv", 0.9)
-
-#print(tt.GetIndex('Name', 'Caroll'))
-
 #dp = DataFrame("../LogisticsSimulation/alteredData.csv")
 #dp22 = DataFrame("../LogisticsSimulation/deliveries.csv")
 start = time.time()
 #dp = DataFrame("alteredData.csv", 0.9)
 #dp = DataFrame("alteredData2.csv", 0.9)
 #dp = DataFrame("../alteredData10k.csv", 0.9)
-dp = DataFrame("../alteredData100k.csv", 0.9)
+#dp = DataFrame("../alteredData100k.csv", 0.9)
 #dp3 = DataFrame("../alteredData1000k.csv", 0.9)
-#dp4 = DataFrame("../alteredData1M.csv", 0.9)
+#dp = DataFrame("../alteredData1M.csv", 0.9)
+
+#dp = DataFrame('deliveries.csv', 0.9)
+dp1 = DataFrame('deliveries10k.csv', 0.9)
+dp2 = DataFrame('deliveries100k.csv', 0.9)
+dp3 = DataFrame('deliveries1M.csv', 0.9)
+
 
 #dp.SanityCheck()
 #dp.TrueFalseRatio()
-#dp.Lookup('Name', 'Carolin')
 
 #dp.PrintDataFrame(5)
-
-dp.DataPreprocessingSupervised(dp.df)
+#dp.DataPreprocessingSortingOne(dp.df)
+dp1.DataPreprocessingSortingTwo(dp1.df)
+dp2.DataPreprocessingSortingTwo(dp2.df)
+dp2.DataPreprocessingSortingTwo(dp3.df)
 end = time.time()
 
 print('Data Frame Size: ', end = "")
-print(len(dp.df.index))
+#print(len(dpTest.df.index))
 print('Time: ', end = "")
 print(end - start)
 
-print(dp.df)
+dp1.SaveCSVFile('10kEncoded')
+dp2.SaveCSVFile('100kEncoded')
+dp3.SaveCSVFile('1MEncoded')
+
+#print(dp.df)
 
 #dp.PrintDataFrame(5)
-#dp.DataSplit()
+dp1.DataSplitTwo()
+dp2.DataSplitTwo()
+dp3.DataSplitTwo()
 #dp.DataSplitCheck()
-#dp.DataSplitVerifying()
+#dp.DataSplitVerifyingTwo()
 #dp.plot_corr(dp.df)
 #dp.df.corr()
 
-#print(reg.GetIndex('Name', 'Errol'))
+print("Random Forest.")
+print("Batch 1.")
+rf = RandomForest(dp1.X_train, dp1.y_train, dp1.X_test, dp1.y_test)
+ 
+rf.Train()
+rf.PrintInformation()
+print()
+ 
+print("Batch 2.")
+rf = RandomForest(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
+ 
+rf.Train()
+rf.PrintInformation()
+ 
+print("Batch 3.")
+rf = RandomForest(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
+ 
+rf.Train()
+rf.PrintInformation()
+ 
+print("Naive Bayes.")
+print('Batch 1')
+nb = NaiveBayes(dp1.X_train, dp1.y_train, dp1.X_test, dp1.y_test)
+ 
+nb.Train()
+nb.PrintInformation()
+print()
+ 
+print("Batch 2")
+nb = NaiveBayes(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
+ 
+nb.Train()
+nb.PrintInformation()
+ 
+print("Batch 3")
+nb = NaiveBayes(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
+ 
+nb.Train()
+nb.PrintInformation()
+ 
+print("Logistic Regression.")
+print('Batch 1')
+lr = Logistic(dp1.X_train, dp1.y_train, dp1.X_test, dp1.y_test)
+ 
+lr.Train()
+lr.PrintInformation()
+print()
+ 
+print("Batch 2")
 
-#dp2.DummyEncode(dp2.df)
-#dp2.DataSplit()
+lr = Logistic(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
+ 
+lr.Train()
+lr.PrintInformation()
+print()
+ 
+print("Batch 3")
 
-#dp3.DummyEncode(dp3.df)
-#dp3.DataSplit()
+lr = Logistic(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
 
-#dp4.DummyEncode(dp4.df)
-#dp4.DataSplit()
-#print("Random Forest batch 1!!!")
-#rf = RandomForest(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
+lr.Train()
+lr.PrintInformation()
 
-#rf.Train()
-#rf.PrintInformation()
-#print()
 
-#print("This is batch 2!")
-#rf = RandomForest(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
-
-#rf.Train()
-#rf.PrintInformation()
-
-#print("Naive Bayes, batch 1")
-#nb = NaiveBayes(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
-
-#nb.Train()
-#nb.PrintInformation()
-#print()
-
-#print("Batch 2")
-#nb = NaiveBayes(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
-
-#nb.Train()
-#nb.PrintInformation()
-
-#print("Logistic Regression, batch 1")
-#lr = Logistic(dp.X_train, dp.y_train, dp.X_test, dp.y_test)
-
-#lr.Train()
-#lr.PrintInformation()
-#print()
-
-#print("Batch 2")
-
-#lr = Logistic(dp2.X_train, dp2.y_train, dp2.X_test, dp2.y_test)
-
-#lr.Train()
-#lr.PrintInformation()
-#print()
-
-#print("Batch 3")
-
-#lr = Logistic(dp3.X_train, dp3.y_train, dp3.X_test, dp3.y_test)
-
-#lr.Train()
-#lr.PrintInformation()
-#print()
-
-#print("Batch 4")
-
-#lr = Logistic(dp4.X_train, dp4.y_train, dp4.X_test, dp4.y_test)
-
-#lr.Train()
-#lr.PrintInformation()
-
+#print("Logistic Regression CV.")
 #lrCV = LogisticCV(dp.X_train, dp.y_train, dp.X_test, dp.y_test, 4)
 
 #lrCV.Train()
